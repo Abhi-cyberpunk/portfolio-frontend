@@ -29,13 +29,17 @@ export default function ContactForm() {
         body: JSON.stringify(formData),
       });
 
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const result = await res.json();
 
-      if (result.success) {
+      if (result && result.success) {
         toast.success("✅ Message sent successfully!");
         setFormData({ name: "", email: "", subject: "", message: "" }); // clear form
       } else {
-        toast.error("❌ Failed to send message. Try again.");
+        toast.error(result?.message || "❌ Failed to send message. Try again.");
       }
     } catch (err) {
       console.error("Contact form error:", err);
