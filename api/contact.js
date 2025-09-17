@@ -1,31 +1,93 @@
-import { MongoClient } from "mongodb";
+import React, { useState } from "react";
+import { toast } from "sonner"; // if you use sonner for notifications
 
-const client = new MongoClient(process.env.MONGO_URL);
-const dbName = process.env.DB_NAME || "portfolio_db";
+export default function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      const data = req.body;
-
-      await client.connect();
-      const db = client.db(dbName);
-      const messages = db.collection("messages");
-
-      await messages.insertOne({
-        name: data.name,
-        email: data.email,
-        subject: data.subject,
-        message: data.message,
-        is_read: false,
-        created_at: new Date()
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
-      res.status(200).json({ success: true, message: "Saved!" });
+      const result = await res.json();
+
+      if (result.success) {
+        toast.success("✅ Message sent successfully!");
+        setFormData({ name: "", email: "", subject: "", message: "" }); // clear form
+      } else {
+        toast.error("❌ Failed to send message. Try again.");
+      }
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      console.error("Contact form error:", err);
+      toast.error("⚠️ Something went wrong.");
+    } finally {
+      setLoading(false);
     }
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
-  }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input
+        type="text"
+        name="name"
+        placeholder="Your Name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Your Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded"
+      />
+      <input
+        type="text"
+        name="subject"
+        placeholder="Subject"
+        value={formData.subject}
+        onChange={handleChange}
+        className="w-full border p-2 rounded"
+      />
+      <textarea
+        name="message"
+        placeholder="Your Message"
+        value={formData.message}
+        onChange={handleChange}
+        required
+        className="w-full border p-2 rounded h-32"
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        {loading ? "Sending..." : "Send Message"}
+      </button>
+    </form>
+  );
 }
