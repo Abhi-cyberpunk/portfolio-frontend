@@ -25,15 +25,17 @@ const Hero = () => {
         {/* Profile Image */}
         <div className="mb-8">
           <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full bg-gray-700 border-4 border-[#39FF14] flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
-              <span className="text-4xl text-gray-400">👤</span>
-            </div>
+            <img
+              src="/profile.jpg" // Place your profile.jpg in the public folder
+              alt="Avinash Nuneti Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
 
         {/* Name and Title */}
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
-          <span className="text-[#39FF14]">Avinash</span> Nuneti <span className="text-gray-400">(Abhi)</span>
+          <span className="text-[#39FF14]">{personalInfo.name}</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-300 mb-6 font-medium">
@@ -62,17 +64,10 @@ const Hero = () => {
           
           <button
             onClick={() => scrollToSection('contact')}
-            className="group border-2 border-[#39FF14] text-[#39FF14] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#39FF14] hover:text-black transition-all duration-300 min-w-[200px]"
+            className="group border border-[#39FF14] text-[#39FF14] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#39FF14] hover:text-black transition-all duration-300 flex items-center gap-2 min-w-[200px] justify-center"
           >
             Contact Me
           </button>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-[#39FF14] rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-[#39FF14] rounded-full mt-2 animate-pulse"></div>
-          </div>
         </div>
       </div>
     </section>

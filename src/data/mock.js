@@ -1,7 +1,7 @@
 // Mock data for Avinash Nuneti Portfolio
 
 export const personalInfo = {
-  name: "Avinash Nuneti (Abhi)",
+  name: "Avinash Nuneti",
   title: "IT Engineer • Broadcast Engineer • Switching Editor",
   tagline: "Bridging IT Infrastructure & Broadcast Excellence.",
   description: "Transforming technical challenges into seamless solutions across IT systems and live broadcast operations.",
